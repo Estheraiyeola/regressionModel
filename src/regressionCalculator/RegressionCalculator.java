@@ -1,6 +1,7 @@
 package regressionCalculator;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 
 public class RegressionCalculator {
@@ -55,7 +56,7 @@ public class RegressionCalculator {
     public double getY_Mean() {
         return y_Mean;
     }
-    public double[][] drawTable(){
+    public double[][] drawTable() throws InputMismatchException {
         calculateX_Mean(storageX);
         calculateY_Mean(storageY);
         int lengthOfTable = storageX.size();
@@ -69,6 +70,7 @@ public class RegressionCalculator {
         squareOfTheDifferenceOfIndependentVariableAndItsMean(storageX, table);
         printTable(table);
         slope = calculateSlope(table);
+        System.out.println();
         y_Intercept = calculateY_Intercept(x_Mean,y_Mean,slope);
         System.out.println("The slope is "+ slope);
         System.out.println("The intercept is "+y_Intercept);
@@ -78,14 +80,16 @@ public class RegressionCalculator {
     }
 
     private void printTable(double[][] table) {
-        System.out.println("""
-                X\t\tY\t\tX-Mean\t\tY-Mean\t\t((X-Mean)(Y-Mean))\t\t(X-Mean)2""");
+        System.out.printf("%-8s%-8s%-8s%-8s%-16s\t%-8s\n", "X", "Y", "X-Mean", "Y-Mean", "(X-Mean)(Y-Mean)", "(X-Mean)^2");
         for (int index = 0; index < table.length; index++) {
-            for (int idx = 0; idx < table[index].length; idx++) {
-                System.out.printf("%.2f\t",table[index][idx]);
-            }
-            System.out.println();
+            System.out.printf("%.2f\t", table[index][0]);
+            System.out.printf("%.2f\t", table[index][1]);
+            System.out.printf("%.2f\t", table[index][2]);
+            System.out.printf("%.2f\t", table[index][3]);
+            System.out.printf("%.2f\t\t\t\t", table[index][4]);
+            System.out.printf("%.2f\n", table[index][5]);
         }
+        System.out.println();
     }
 
     public double calculateSlope(double[][] table) {
@@ -139,7 +143,7 @@ public class RegressionCalculator {
         return Double.parseDouble(String.format("%.2f",yMean - slope * xMean));
     }
 
-    public double testModel(double intercept, double slope, double independentVariable) {
-        return Double.parseDouble(String.format("%.2f", y_Intercept + this.slope * independentVariable));
+    public double testModel(double independentVariable) {
+        return Double.parseDouble(String.format("%.2f", y_Intercept + slope * independentVariable));
     }
 }

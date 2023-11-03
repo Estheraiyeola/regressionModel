@@ -1,6 +1,7 @@
 package regressionCalculator;
 
 import java.util.Arrays;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -11,34 +12,79 @@ public class Main {
         Main main = new Main();
         main.collectVariables();
         regressionCalculator.drawTable();
-        System.out.println(main.modelCreated());
+        main.modelCreated();
     }
 
     public void collectVariables(){
-        System.out.println("Enter the data for independent variable(X) and 0 to stop");
-        double xNumber = input.nextDouble();
-        while (xNumber != 0){
-            regressionCalculator.collect_X_Data(List.of(xNumber));
-            System.out.println("Enter the data for independent variable");
-            xNumber = input.nextDouble();
-        }
-        System.out.println("Enter the data for dependent variable(Y) and 0 to stop");
-        double yNumber = input.nextDouble();
-        while (yNumber != 0){
-            regressionCalculator.collect_Y_Data(List.of(yNumber));
-            System.out.println("Enter the data for independent variable");
-            yNumber = input.nextDouble();
+        collect_X_Variables();
+        collect_Y_Variables();
+
+
+    }
+
+    private void collect_Y_Variables() {
+        try {
+            System.out.println("Enter the data for independent variable (Y) and 0 to stop");
+
+            while (true) {
+                String userInput = input.next();
+
+                if (userInput.equals("0")) {
+                    break; // User entered 0, exit the loop
+                }
+
+                try {
+                    double yNumber = Double.parseDouble(userInput);
+                    regressionCalculator.collect_Y_Data(List.of(yNumber));
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid input. Please enter a valid number or 0 to stop.");
+                }
+            }
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter a valid number or 0 to stop.");
+            collect_Y_Variables();
         }
     }
-    public double modelCreated(){
-        System.out.println("What is your intercept? ");
-        double intercept = input.nextDouble();
 
-        System.out.println("What is your slope? ");
-        double slope = input.nextDouble();
+    private void collect_X_Variables() {
+        try {
+            System.out.println("Enter the data for independent variable (X) and 0 to stop");
 
-        System.out.println("What is your X_Variable? ");
-        double independentVariable = input.nextDouble();
-        return regressionCalculator.testModel(intercept, slope, independentVariable);
+            while (true) {
+                String userInput = input.next();
+
+                if (userInput.equals("0")) {
+                    break; // User entered 0, exit the loop
+                }
+
+                try {
+                    double xNumber = Double.parseDouble(userInput);
+                    regressionCalculator.collect_X_Data(List.of(xNumber));
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid input. Please enter a valid number or 0 to stop.");
+                }
+            }
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter a valid number or 0 to stop.");
+            collect_X_Variables();
+        }
+    }
+
+    public void modelCreated() throws InputMismatchException{
+        try {
+            System.out.println("What is your independent variable? ");
+            String independentVariable = input.next();
+            try {
+                double independentVariableConverted = Double.parseDouble(independentVariable);
+                System.out.println("Your dependent variable is " + regressionCalculator.testModel(independentVariableConverted));
+
+            }catch (NumberFormatException e){
+                System.out.println("Invalid input. Please enter a valid number");
+            }
+        }catch (InputMismatchException e){
+            System.out.println("Invalid input. Please enter a valid number");
+            modelCreated();
+        }
+
     }
 }

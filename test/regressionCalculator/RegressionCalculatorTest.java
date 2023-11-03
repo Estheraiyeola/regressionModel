@@ -118,7 +118,7 @@ public class RegressionCalculatorTest {
         double independentVariable = 6.2;
 
 
-        assertEquals(1.58, regressionCalculator.testModel(intercept, slope, independentVariable));
+        assertEquals(12.93, regressionCalculator.testModel(independentVariable));
     }
 
 
